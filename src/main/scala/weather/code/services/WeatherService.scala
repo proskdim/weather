@@ -18,3 +18,17 @@ case object WeatherService:
       .get(uri"http://api.weatherapi.com/v1/current.json?$queryParams")
       .header("Content-Type", "application/json")
       .send()
+
+  def getForecast(): Response[String] =
+    val queryParams = Map(
+      "q" -> city,
+      "days" -> 1,
+      "key" -> apiKey.getOrElse("no"),
+      "aqi" -> "no",
+      "alerts" -> "no"
+    )
+
+    quickRequest
+      .get(uri"http://api.weatherapi.com/v1/forecast.json?$queryParams")
+      .header("Content-Type", "application/json")
+      .send()

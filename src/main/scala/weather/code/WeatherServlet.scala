@@ -25,10 +25,36 @@ class WeatherServlet extends ScalatraServlet:
       val result = ("temperature" -> temperature) ~ ("windSpeed" -> windSpeed)
 
       compact(render(result))
-    else halt(404, "Weather data not found: ")
+    else halt(404, "Weather data not found")
   }
 
-  get("/weather/historical") {}
+  get("/weather/historical") {
+    val response = WeatherService.getForecast()
+
+    if response.code.isSuccess then
+      val json = ujson.read(response.body)
+      val forecast: mutable.Map[String, ujson.Value] = json("forecast").obj
+      val forecastDay: mutable.Map[String, ujson.Value] =
+        forecast("forecastday").arr(0).obj
+
+      val day: mutable.Map[String, ujson.Value] = forecastDay("day").obj
+      val maxTemp: Double = day("maxtemp_c").num
+      val minTemp: Double = day("mintemp_c").num
+      val avgTemp: Double = day("avgtemp_c").num
+
+      val dayResult =
+        ("maxTemp" -> maxTemp) ~ ("minTemp" -> minTemp) ~ ("avgTemp" -> avgTemp)
+
+      val hourObjects = forecastDay("hour").arr
+        .map(h => h.obj)
+
+      val hoursResult = ("hours" -> hourObjects.map { h =>
+        (("time" -> h("time").str) ~ ("temp" -> h("temp_c").num))
+      })
+
+      compact(render(dayResult ~ hoursResult))
+    else halt(404, "Weather data not found")
+  }
 
   get("/weather/historical/max") {}
 
