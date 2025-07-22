@@ -11,7 +11,11 @@ lazy val hello = (project in file("."))
       "org.scalatra" %% "scalatra-jakarta" % ScalatraVersion,
       "org.scalatra" %% "scalatra-scalatest-jakarta" % ScalatraVersion % "test",
       "ch.qos.logback" % "logback-classic" % "1.5.6" % "runtime",
-      "jakarta.servlet" % "jakarta.servlet-api" % "6.0.0" % "provided"
+      "jakarta.servlet" % "jakarta.servlet-api" % "6.0.0" % "provided",
+      "org.scalatra" %% "scalatra-json-jakarta" % "3.0.0",
+      "org.json4s"   %% "json4s-jackson" % "4.0.6",
+      "com.softwaremill.sttp.client4" %% "core" % "4.0.9",
+      "com.lihaoyi" %% "upickle" % "4.1.0"
     ),
   )
 
