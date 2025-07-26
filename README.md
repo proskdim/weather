@@ -1,6 +1,8 @@
-# weather #
+# Scalatra simple weather app
 
-## Build & Run ##
+https://weather-2q1s.onrender.com/
+
+## Development build & run
 
 ```sh
 $ sbt
