@@ -4,6 +4,7 @@ import jakarta.servlet.ServletContext
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext): Unit = {
-    context.mount(new WeatherServlet, "/*")
+    context.mount(new WeatherServlet, "/weather/*")
+    context.mount(new ApplicationServlet, "/*")
   }
 }

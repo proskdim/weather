@@ -12,10 +12,8 @@ class WeatherServlet extends ScalatraServlet:
   before() {
     contentType = "application/json"
   }
-
-  get("/health") { "OK" }
-
-  get("/weather/current") {
+  
+  get("/current") {
     val response = WeatherService.getCurrentWeather()
 
     if response.code.isSuccess then
@@ -33,7 +31,7 @@ class WeatherServlet extends ScalatraServlet:
     else halt(404, "Weather data not found")
   }
 
-  get("/weather/historical") {
+  get("/historical") {
     val response = WeatherService.getForecast()
 
     if response.code.isSuccess then
@@ -53,7 +51,7 @@ class WeatherServlet extends ScalatraServlet:
     else halt(404, "Weather data not found")
   }
 
-  get("/weather/historical/max") {
+  get("/historical/max") {
     val response = WeatherService.getForecast()
 
     if response.code.isSuccess then
@@ -68,7 +66,7 @@ class WeatherServlet extends ScalatraServlet:
     else halt(404, "Weather data not found")
   }
 
-  get("/weather/historical/min") {
+  get("/historical/min") {
     val response = WeatherService.getForecast()
 
     if response.code.isSuccess then
@@ -83,7 +81,7 @@ class WeatherServlet extends ScalatraServlet:
     else halt(404, "Weather data not found")
   }
 
-  get("/weather/historical/avg") {
+  get("/historical/avg") {
     val response = WeatherService.getForecast()
 
     if response.code.isSuccess then
