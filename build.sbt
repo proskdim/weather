@@ -9,6 +9,7 @@ lazy val hello = (project in file("."))
     version := "0.1.0-SNAPSHOT",
     libraryDependencies ++= Seq(
       "org.scalatra" %% "scalatra-jakarta" % ScalatraVersion,
+      "org.scalatest" %% "scalatest" % "3.2.19" % Test,
       "org.scalatra" %% "scalatra-scalatest-jakarta" % ScalatraVersion % "test",
       "ch.qos.logback" % "logback-classic" % "1.5.6" % "runtime",
       "jakarta.servlet" % "jakarta.servlet-api" % "6.0.0" % "provided",
