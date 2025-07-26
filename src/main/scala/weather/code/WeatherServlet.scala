@@ -2,29 +2,34 @@ package weather.code
 
 import org.scalatra.*
 import weather.code.services.WeatherService
-
-import scala.collection.mutable
-
-// JSON-related libraries
 import org.json4s.jackson.JsonMethods.*
 import org.json4s.JsonDSL.*
+import weather.code.utils.*
+
+import scala.collection.mutable
 
 class WeatherServlet extends ScalatraServlet:
   before() {
     contentType = "application/json"
   }
 
+  get("/health") { "OK" }
+
   get("/weather/current") {
     val response = WeatherService.getCurrentWeather()
 
     if response.code.isSuccess then
       val json = ujson.read(response.body)
-      val weather: mutable.Map[String, ujson.Value] = json("current").obj
-      val temperature: Double = weather("temp_c").num
-      val windSpeed: Double = weather("wind_mph").num
-      val result = ("temperature" -> temperature) ~ ("windSpeed" -> windSpeed)
 
-      compact(render(result))
+      val weather = fetchObj(json, "current")
+      val temp = fetchNum(weather, "temp_c")
+      val wind = fetchNum(weather, "wind_mph")
+
+      compact(
+        render(
+          ("temp" -> temp) ~ ("wind" -> wind)
+        )
+      )
     else halt(404, "Weather data not found")
   }
 
@@ -33,16 +38,18 @@ class WeatherServlet extends ScalatraServlet:
 
     if response.code.isSuccess then
       val json = ujson.read(response.body)
-      val forecast: mutable.Map[String, ujson.Value] = json("forecast").obj
-      val day: mutable.Map[String, ujson.Value] =
-        forecast("forecastday").arr(0).obj
 
-      val hourObjects = day("hour").arr.map(h => h.obj)
+      val forecast = fetchObj(json, "forecast")
+      val forecastDay = forecast("forecastday").arr(0).obj
+      val hours = forecastDay("hour").arr.map(h => h.obj)
 
-      val result = ("hours" -> hourObjects.map { h =>
-        (("time" -> h("time").str) ~ ("temp" -> h("temp_c").num))
-      })
-      compact(render(result))
+      compact(
+        render(
+          ("hours" -> hours.map { h =>
+            (("time" -> h("time").str) ~ ("temp" -> h("temp_c").num))
+          })
+        )
+      )
     else halt(404, "Weather data not found")
   }
 
@@ -51,15 +58,13 @@ class WeatherServlet extends ScalatraServlet:
 
     if response.code.isSuccess then
       val json = ujson.read(response.body)
-      val forecast: mutable.Map[String, ujson.Value] = json("forecast").obj
-      val forecastDay: mutable.Map[String, ujson.Value] =
-        forecast("forecastday").arr(0).obj
+      val temp = fetchTempFromDay(json, "maxtemp_c")
 
-      val day: mutable.Map[String, ujson.Value] = forecastDay("day").obj
-      val maxTemp: Double = day("maxtemp_c").num
-      val result = ("maxTemp" -> maxTemp)
-
-      compact(render(result))
+      compact(
+        render(
+          ("temp" -> temp)
+        )
+      )
     else halt(404, "Weather data not found")
   }
 
@@ -68,15 +73,13 @@ class WeatherServlet extends ScalatraServlet:
 
     if response.code.isSuccess then
       val json = ujson.read(response.body)
-      val forecast: mutable.Map[String, ujson.Value] = json("forecast").obj
-      val forecastDay: mutable.Map[String, ujson.Value] =
-        forecast("forecastday").arr(0).obj
+      val temp = fetchTempFromDay(json, "mintemp_c")
 
-      val day: mutable.Map[String, ujson.Value] = forecastDay("day").obj
-      val maxTemp: Double = day("mintemp_c").num
-      val result = ("minTemp" -> maxTemp)
-
-      compact(render(result))
+      compact(
+        render(
+          ("temp" -> temp)
+        )
+      )
     else halt(404, "Weather data not found")
   }
 
@@ -85,18 +88,24 @@ class WeatherServlet extends ScalatraServlet:
 
     if response.code.isSuccess then
       val json = ujson.read(response.body)
-      val forecast: mutable.Map[String, ujson.Value] = json("forecast").obj
-      val forecastDay: mutable.Map[String, ujson.Value] =
-        forecast("forecastday").arr(0).obj
+      val temp = fetchTempFromDay(json, "avgtemp_c")
 
-      val day: mutable.Map[String, ujson.Value] = forecastDay("day").obj
-      val maxTemp: Double = day("avgtemp_c").num
-      val result = ("avgTemp" -> maxTemp)
-
-      compact(render(result))
+      compact(
+        render(
+          ("temp" -> temp)
+        )
+      )
     else halt(404, "Weather data not found")
   }
 
-  get("/health") {
-    "OK"
-  }
+  // helpers
+  private def fetchForecastDay(
+      value: ujson.Value
+  ): mutable.Map[String, ujson.Value] =
+    val forecast = fetchObj(value, "forecast")
+    val forecastDay = forecast("forecastday").arr(0).obj
+    fetchObj(forecastDay, "day")
+
+  private def fetchTempFromDay(value: ujson.Value, key: String): Double =
+    val day = fetchForecastDay(value)
+    fetchNum(day, key)
