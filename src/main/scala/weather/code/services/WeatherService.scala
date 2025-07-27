@@ -5,13 +5,15 @@ import sttp.client4.quick.*
 
 case object WeatherService:
   private val city = "Krasnoyarsk"
+  private val lang = "ru"
   private val apiKey = sys.env.get("API_KEY")
 
   def getCurrentWeather(): Response[String] =
     val queryParams = Map(
       "q" -> city,
       "key" -> apiKey.getOrElse("no"),
-      "aqi" -> "no"
+      "aqi" -> "no",
+      "lang" -> lang
     )
 
     quickRequest

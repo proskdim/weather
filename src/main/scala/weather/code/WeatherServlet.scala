@@ -23,13 +23,22 @@ class WeatherServlet extends ScalatraServlet:
     if response.code.isSuccess then
       val json = ujson.read(response.body)
 
-      val weather = fetchObj(json, "current")
-      val temp = fetchNum(weather, "temp_c")
-      val wind = fetchNum(weather, "wind_mph")
+      val current = fetchObj(json, "current")
+      val temp = fetchNum(current, "temp_c")
+      val wind = fetchNum(current, "wind_mph")
+
+      val condition = fetchObj(current, "condition")
+      val text = fetchStr(condition, "text")
+
+      val location = fetchObj(json, "location")
+      val time = fetchStr(location, "localtime")
 
       compact(
         render(
-          ("temp" -> temp) ~ ("wind" -> wind)
+          ("temp" -> temp) ~
+            ("wind" -> wind) ~
+            ("text" -> text) ~
+            ("time" -> time)
         )
       )
     else halt(404, "Weather data not found")
@@ -48,7 +57,8 @@ class WeatherServlet extends ScalatraServlet:
       compact(
         render(
           ("hours" -> hours.map { h =>
-            (("time" -> h("time").str) ~ ("temp" -> h("temp_c").num))
+            (("time" -> h("time").str) ~
+              ("temp" -> h("temp_c").num))
           })
         )
       )
