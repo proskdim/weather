@@ -7,4 +7,8 @@ class ApplicationServlet extends ScalatraServlet:
     contentType = "application/json"
   }
 
-  get("/health") { "OK" }
+  after() {
+    response.setHeader("Access-Control-Allow-Origin", "*")
+  }
+
+  get("/health") { """{"status": "ok"}""" }

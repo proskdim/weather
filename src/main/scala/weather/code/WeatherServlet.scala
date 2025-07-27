@@ -12,7 +12,11 @@ class WeatherServlet extends ScalatraServlet:
   before() {
     contentType = "application/json"
   }
-  
+
+  after() {
+    response.setHeader("Access-Control-Allow-Origin", "*")
+  }
+
   get("/current") {
     val response = WeatherService.getCurrentWeather()
 
