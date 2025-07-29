@@ -11,4 +11,6 @@ class ApplicationServlet extends ScalatraServlet:
     response.setHeader("Access-Control-Allow-Origin", "*")
   }
 
-  get("/health") { """{"status": "ok"}""" }
+  notFound {
+    """{"error": "resource not found"}"""
+  }

@@ -7,15 +7,7 @@ import org.json4s.jackson.JsonMethods.*
 import org.json4s.JsonDSL.*
 import scala.util.{Failure, Success}
 
-class WeatherServlet extends ScalatraServlet:
-  before() {
-    contentType = "application/json"
-  }
-
-  after() {
-    response.setHeader("Access-Control-Allow-Origin", "*")
-  }
-
+class WeatherServlet extends ApplicationServlet:
   private val currentUrl = "http://api.weatherapi.com/v1/current.json"
   private val historicApi = "http://api.weatherapi.com/v1/forecast.json"
 
