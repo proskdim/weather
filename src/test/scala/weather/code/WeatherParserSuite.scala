@@ -6,7 +6,6 @@ import org.testcontainers.junit.jupiter.*
 import org.wiremock.integrations.testcontainers.WireMockContainer
 import weather.code.services.{WeatherParser, WeatherService}
 
-import java.io.File
 import scala.io.Source
 import scala.util.{Failure, Success}
 
