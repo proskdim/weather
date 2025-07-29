@@ -1,6 +1,7 @@
 package weather.code
 
 import org.scalatra.ScalatraServlet
+import org.scalatra.NotFound
 
 class ApplicationServlet extends ScalatraServlet:
   before() {
@@ -12,5 +13,5 @@ class ApplicationServlet extends ScalatraServlet:
   }
 
   notFound {
-    """{"error": "resource not found"}"""
+    NotFound("""{"error": "resource not found"}""")
   }

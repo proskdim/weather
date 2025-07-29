@@ -1,6 +1,8 @@
 package weather.code
 
+import org.scalatra.Ok
+
 class HealthServlet extends ApplicationServlet:
   get("/health") {
-    """{"status": "ok"}"""
+    Ok("""{"status": "ok"}""")
   }

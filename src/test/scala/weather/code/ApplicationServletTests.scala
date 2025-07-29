@@ -2,12 +2,19 @@ package weather.code
 
 import org.scalatra.test.scalatest.*
 
-class ApplicationServletTests extends ScalatraFunSuite:
-  addServlet(classOf[ApplicationServlet], "/*")
+class HealthServletTests extends ScalatraFunSuite:
+  addServlet(classOf[HealthServlet], "/*")
 
-  test("health check") {
+  test("testing health status") {
     get("/health") {
       assert(status == 200)
       assert(body == """{"status": "ok"}""")
+    }
+  }
+
+  test("testing 404") {
+    get("/foo") {
+      assert(status == 404)
+      assert(body == """{"error": "resource not found"}""")
     }
   }
