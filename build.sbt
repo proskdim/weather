@@ -27,3 +27,5 @@ lazy val hello = (project in file("."))
 enablePlugins(SbtWar)
 
 Test / fork := true
+
+Test / resourceDirectory := baseDirectory.value / "resources"

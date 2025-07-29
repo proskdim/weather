@@ -6,6 +6,8 @@ import org.testcontainers.junit.jupiter.*
 import org.wiremock.integrations.testcontainers.WireMockContainer
 import weather.code.services.{WeatherParser, WeatherService}
 
+import java.io.File
+import scala.io.Source
 import scala.util.{Failure, Success}
 
 case class WeatherResource() {}
@@ -15,11 +17,17 @@ class WeatherParserSuite extends AnyFunSpec with BeforeAndAfterAll:
 
   @Container
   val mockServerCurrent = new WireMockContainer("wiremock/wiremock:3.6.0")
-    .withMappingFromResource("/", classOf[WeatherResource], "current.json")
+    .withMappingFromJSON(
+      "/",
+      Source.fromFile("src/test/resources/current.json").getLines().mkString
+    )
 
   @Container
   val mockServerHistoric = new WireMockContainer("wiremock/wiremock:3.6.0")
-    .withMappingFromResource("/", classOf[WeatherResource], "historic.json")
+    .withMappingFromJSON(
+      "/",
+      Source.fromFile("src/test/resources/historic.json").getLines().mkString
+    )
 
   override def beforeAll(): Unit =
     mockServerCurrent.start()
