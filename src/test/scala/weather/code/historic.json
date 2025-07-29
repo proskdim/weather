@@ -1,0 +1,201 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": ".*forecast.*"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "forecast": {
+            "forecastday": [
+              {
+                "date": "2025-07-29",
+                "date_epoch": 1753747200,
+                "day": {
+                  "maxtemp_c": 21.6,
+                  "maxtemp_f": 70.9,
+                  "mintemp_c": 15.3,
+                  "mintemp_f": 59.5,
+                  "avgtemp_c": 18.1,
+                  "avgtemp_f": 64.6,
+                  "maxwind_mph": 9.2,
+                  "maxwind_kph": 14.8,
+                  "totalprecip_mm": 0.19,
+                  "totalprecip_in": 0.01,
+                  "totalsnow_cm": 0.0,
+                  "avgvis_km": 10.0,
+                  "avgvis_miles": 6.0,
+                  "avghumidity": 62,
+                  "daily_will_it_rain": 0,
+                  "daily_chance_of_rain": 62,
+                  "daily_will_it_snow": 0,
+                  "daily_chance_of_snow": 0,
+                  "condition": {
+                    "text": "Patchy rain nearby",
+                    "icon": "//cdn.weatherapi.com/weather/64x64/day/176.png",
+                    "code": 1063
+                  },
+                  "uv": 0.5
+                },
+                "astro": {
+                  "sunrise": "05:20 AM",
+                  "sunset": "08:53 PM",
+                  "moonrise": "10:47 AM",
+                  "moonset": "10:31 PM",
+                  "moon_phase": "Waxing Crescent",
+                  "moon_illumination": 18,
+                  "is_moon_up": 0,
+                  "is_sun_up": 0
+                },
+                "hour": [
+                  {
+                    "time_epoch": 1753743600,
+                    "time": "2025-07-29 00:00",
+                    "temp_c": 17.5,
+                    "temp_f": 63.5,
+                    "is_day": 0,
+                    "condition": {
+                      "text": "Partly Cloudy ",
+                      "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
+                      "code": 1003
+                    },
+                    "wind_mph": 3.6,
+                    "wind_kph": 5.8,
+                    "wind_degree": 326,
+                    "wind_dir": "NNW",
+                    "pressure_mb": 1020.0,
+                    "pressure_in": 30.11,
+                    "precip_mm": 0.0,
+                    "precip_in": 0.0,
+                    "snow_cm": 0.0,
+                    "humidity": 62,
+                    "cloud": 55,
+                    "feelslike_c": 17.5,
+                    "feelslike_f": 63.5,
+                    "windchill_c": 17.5,
+                    "windchill_f": 63.5,
+                    "heatindex_c": 17.5,
+                    "heatindex_f": 63.5,
+                    "dewpoint_c": 10.2,
+                    "dewpoint_f": 50.4,
+                    "will_it_rain": 0,
+                    "chance_of_rain": 0,
+                    "will_it_snow": 0,
+                    "chance_of_snow": 0,
+                    "vis_km": 10.0,
+                    "vis_miles": 6.0,
+                    "gust_mph": 6.1,
+                    "gust_kph": 9.8,
+                    "uv": 0
+                  },
+                  {
+                    "time_epoch": 1753747200,
+                    "time": "2025-07-29 01:00",
+                    "temp_c": 17.4,
+                    "temp_f": 63.3,
+                    "is_day": 0,
+                    "condition": {
+                      "text": "Partly Cloudy ",
+                      "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
+                      "code": 1003
+                    },
+                    "wind_mph": 4.5,
+                    "wind_kph": 7.2,
+                    "wind_degree": 346,
+                    "wind_dir": "NNW",
+                    "pressure_mb": 1019.0,
+                    "pressure_in": 30.1,
+                    "precip_mm": 0.0,
+                    "precip_in": 0.0,
+                    "snow_cm": 0.0,
+                    "humidity": 62,
+                    "cloud": 45,
+                    "feelslike_c": 17.4,
+                    "feelslike_f": 63.3,
+                    "windchill_c": 17.4,
+                    "windchill_f": 63.3,
+                    "heatindex_c": 17.4,
+                    "heatindex_f": 63.3,
+                    "dewpoint_c": 10.0,
+                    "dewpoint_f": 50.0,
+                    "will_it_rain": 0,
+                    "chance_of_rain": 0,
+                    "will_it_snow": 0,
+                    "chance_of_snow": 0,
+                    "vis_km": 10.0,
+                    "vis_miles": 6.0,
+                    "gust_mph": 7.0,
+                    "gust_kph": 11.3,
+                    "uv": 0
+                  },
+                  {
+                    "time_epoch": 1753750800,
+                    "time": "2025-07-29 02:00",
+                    "temp_c": 17.0,
+                    "temp_f": 62.7,
+                    "is_day": 0,
+                    "condition": {
+                      "text": "Clear ",
+                      "icon": "//cdn.weatherapi.com/weather/64x64/night/113.png",
+                      "code": 1000
+                    },
+                    "wind_mph": 4.9,
+                    "wind_kph": 7.9,
+                    "wind_degree": 346,
+                    "wind_dir": "NNW",
+                    "pressure_mb": 1019.0,
+                    "pressure_in": 30.1,
+                    "precip_mm": 0.0,
+                    "precip_in": 0.0,
+                    "snow_cm": 0.0,
+                    "humidity": 63,
+                    "cloud": 22,
+                    "feelslike_c": 17.0,
+                    "feelslike_f": 62.7,
+                    "windchill_c": 17.0,
+                    "windchill_f": 62.7,
+                    "heatindex_c": 17.0,
+                    "heatindex_f": 62.7,
+                    "dewpoint_c": 9.9,
+                    "dewpoint_f": 49.8,
+                    "will_it_rain": 0,
+                    "chance_of_rain": 0,
+                    "will_it_snow": 0,
+                    "chance_of_snow": 0,
+                    "vis_km": 10.0,
+                    "vis_miles": 6.0,
+                    "gust_mph": 7.3,
+                    "gust_kph": 11.7,
+                    "uv": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": ".*invalid-forecast.*"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "not-forecast": {
+            "forecastday": []
+          }
+        }
+      }
+    }
+  ]
+}

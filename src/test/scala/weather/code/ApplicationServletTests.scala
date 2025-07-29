@@ -8,6 +8,6 @@ class ApplicationServletTests extends ScalatraFunSuite:
   test("health check") {
     get("/health") {
       assert(status == 200)
-      assert(body == "OK")
+      assert(body == """{"status": "ok"}""")
     }
   }

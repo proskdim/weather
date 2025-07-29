@@ -1,12 +1,11 @@
 package weather.code
 
+import org.json4s.JValue
 import org.scalatra.*
-import weather.code.services.WeatherService
+import weather.code.services.{WeatherParser, WeatherService}
 import org.json4s.jackson.JsonMethods.*
 import org.json4s.JsonDSL.*
-import weather.code.utils.*
-
-import scala.collection.mutable
+import scala.util.{Failure, Success}
 
 class WeatherServlet extends ScalatraServlet:
   before() {
@@ -17,107 +16,71 @@ class WeatherServlet extends ScalatraServlet:
     response.setHeader("Access-Control-Allow-Origin", "*")
   }
 
+  private val currentUrl = "http://api.weatherapi.com/v1/current.json"
+  private val historicApi = "http://api.weatherapi.com/v1/forecast.json"
+
+  private def renderSuccess(value: JValue) = compact(render(value))
+  private def renderFailure(value: JValue) = compact(render("error" -> value))
+  private def renderNotFound = compact(render("error" -> "data not found"))
+
+  private def defaultParams = Map(
+    "q" -> "Krasnoyarsk",
+    "key" -> sys.env.get("API_KEY").getOrElse("no"),
+    "aqi" -> "no",
+    "lang" -> "ru"
+  )
+
+  private def historicParams = defaultParams ++ Map(
+    "days" -> "1",
+    "alerts" -> "no"
+  )
+
   get("/current") {
-    val response = WeatherService.getCurrentWeather()
+    val response = WeatherService.fetchWeather(currentUrl, defaultParams)
 
-    if response.code.isSuccess then
-      val json = ujson.read(response.body)
-
-      val current = fetchObj(json, "current")
-      val temp = fetchNum(current, "temp_c")
-      val wind = fetchNum(current, "wind_mph")
-
-      val condition = fetchObj(current, "condition")
-      val text = fetchStr(condition, "text")
-
-      val location = fetchObj(json, "location")
-      val time = fetchStr(location, "localtime")
-
-      compact(
-        render(
-          ("temp" -> temp) ~
-            ("wind" -> wind) ~
-            ("text" -> text) ~
-            ("time" -> time)
-        )
-      )
-    else halt(404, "Weather data not found")
+    if response.isSuccess then
+      WeatherParser.parseCurrentWeather(response.body) match
+        case Success(value) => renderSuccess(value)
+        case Failure(exc)   => renderFailure(exc.getMessage)
+    else renderNotFound
   }
 
   get("/historical") {
-    val response = WeatherService.getForecast()
+    val response = WeatherService.fetchWeather(historicApi, historicParams)
 
-    if response.code.isSuccess then
-      val json = ujson.read(response.body)
-
-      val forecast = fetchObj(json, "forecast")
-      val forecastDay = forecast("forecastday").arr(0).obj
-      val hours = forecastDay("hour").arr.map(h => h.obj)
-
-      compact(
-        render(
-          ("hours" -> hours.map { h =>
-            (("time" -> h("time").str) ~
-              ("temp" -> h("temp_c").num))
-          })
-        )
-      )
-    else halt(404, "Weather data not found")
+    if response.isSuccess then
+      WeatherParser.parseHistoricWeather(response.body) match
+        case Success(value) => renderSuccess(value)
+        case Failure(exc)   => renderFailure(exc.getMessage)
+    else renderNotFound
   }
 
   get("/historical/max") {
-    val response = WeatherService.getForecast()
+    val response = WeatherService.fetchWeather(historicApi, historicParams)
 
-    if response.code.isSuccess then
-      val json = ujson.read(response.body)
-      val temp = fetchTempFromDay(json, "maxtemp_c")
-
-      compact(
-        render(
-          ("temp" -> temp)
-        )
-      )
-    else halt(404, "Weather data not found")
+    if response.isSuccess then
+      WeatherParser.parseHistoricWeatherByTag(response.body, "maxtemp_c") match
+        case Success(value) => renderSuccess(value)
+        case Failure(exc)   => renderFailure(exc.getMessage)
+    else renderNotFound
   }
 
   get("/historical/min") {
-    val response = WeatherService.getForecast()
+    val response = WeatherService.fetchWeather(historicApi, historicParams)
 
-    if response.code.isSuccess then
-      val json = ujson.read(response.body)
-      val temp = fetchTempFromDay(json, "mintemp_c")
-
-      compact(
-        render(
-          ("temp" -> temp)
-        )
-      )
-    else halt(404, "Weather data not found")
+    if response.isSuccess then
+      WeatherParser.parseHistoricWeatherByTag(response.body, "mintemp_c") match
+        case Success(value) => renderSuccess(value)
+        case Failure(exc)   => renderFailure(exc.getMessage)
+    else renderNotFound
   }
 
   get("/historical/avg") {
-    val response = WeatherService.getForecast()
+    val response = WeatherService.fetchWeather(historicApi, historicParams)
 
-    if response.code.isSuccess then
-      val json = ujson.read(response.body)
-      val temp = fetchTempFromDay(json, "avgtemp_c")
-
-      compact(
-        render(
-          ("temp" -> temp)
-        )
-      )
-    else halt(404, "Weather data not found")
+    if response.isSuccess then
+      WeatherParser.parseHistoricWeatherByTag(response.body, "avgtemp_c") match
+        case Success(value) => renderSuccess(value)
+        case Failure(exc)   => renderFailure(exc.getMessage)
+    else renderNotFound
   }
-
-  // helpers
-  private def fetchForecastDay(
-      value: ujson.Value
-  ): mutable.Map[String, ujson.Value] =
-    val forecast = fetchObj(value, "forecast")
-    val forecastDay = forecast("forecastday").arr(0).obj
-    fetchObj(forecastDay, "day")
-
-  private def fetchTempFromDay(value: ujson.Value, key: String): Double =
-    val day = fetchForecastDay(value)
-    fetchNum(day, key)

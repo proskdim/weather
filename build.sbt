@@ -16,7 +16,12 @@ lazy val hello = (project in file("."))
       "org.scalatra" %% "scalatra-json-jakarta" % "3.0.0",
       "org.json4s"   %% "json4s-jackson" % "4.0.6",
       "com.softwaremill.sttp.client4" %% "core" % "4.0.9",
-      "com.lihaoyi" %% "upickle" % "4.1.0"
+      "com.lihaoyi" %% "upickle" % "4.1.0",
+
+      "org.testcontainers" % "testcontainers" % "1.21.3" % Test,
+      "org.testcontainers" % "junit-jupiter" % "1.21.3" % Test,
+      "org.testcontainers" % "spock" % "1.21.3" % Test,
+      "org.wiremock.integrations.testcontainers" % "wiremock-testcontainers-module" % "1.0-alpha-15",
     ),
   )
 
@@ -24,3 +29,5 @@ enablePlugins(SbtTwirl)
 enablePlugins(SbtWar)
 
 Test / fork := true
+
+Test / resourceDirectory := baseDirectory.value / "resources"
