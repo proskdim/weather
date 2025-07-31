@@ -20,6 +20,9 @@ val containersspock = "org.testcontainers" % "spock" % "1.21.3" % Test
 val containerwiremock =
   "org.wiremock.integrations.testcontainers" % "wiremock-testcontainers-module" % "1.0-alpha-15"
 
+val doobie = "org.tpolecat" %% "doobie-core" % "1.0.0-RC8"
+val doobieh2 = "org.tpolecat" %% "doobie-h2" % "1.0.0-RC8"
+
 lazy val hello = (project in file("."))
   .settings(
     name := "weather",
@@ -37,7 +40,9 @@ lazy val hello = (project in file("."))
       testcontainers,
       containersjunit,
       containersspock,
-      containerwiremock
+      containerwiremock,
+      doobie,
+      doobieh2
     )
   )
 
